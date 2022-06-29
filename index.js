@@ -21,7 +21,7 @@ dbConnection();
 
 
 // Routes
-// app.get( '/', )
+app.use( '/api', require('./routes'))
 
 app.listen( port, () => {
     console.log(`server running in port ${ port }`)
