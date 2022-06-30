@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require("../helpers/success");
-const { getAllUsers, createuser} = require("../services/users");
+const { getAllUsers, createUser} = require("../services/users");
 
 module.exports = {
     getUsers: catchAsync ( async (req, res, next )=> {
@@ -21,14 +21,13 @@ module.exports = {
             next( httpError )
         }
     }),
-    postUser: async (req, res ) => {
+    postUser: catchAsync( async (req, res, next ) => {
     
         const { name, email, password } = req.body;
-        
-        
+                
         try {
             const body = { name, email, password };
-            const user = await createuser( body );
+            const user = await createUser( body );
             
         endpointResponse({
             code: 201,
@@ -38,7 +37,11 @@ module.exports = {
         })
             
         } catch (error) {
-            console.log(error)
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving User Create] - [users - POST]: ${ error.message }`
+            )
+            next( httpError )
         }
-    },
+    }),
 }
