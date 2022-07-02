@@ -50,6 +50,21 @@ exports.updateUser = async ( id, body) => {
         throw new ErrorObject( error.message, error.statusCode || 500 );
     }
 }
+  
+exports.destroyUser = async ( id) => {
+    try {
+        const user = await User.findById( id );
+        if( !user ){
+            throw new ErrorObject('user doesn\'t exist', 404)
+        }
+        
+        const userDb = await User.findByIdAndRemove( id )
+        return userDb;
+        
+    } catch (error) {
+        throw new ErrorObject( error.message, error.statusCode || 500 );
+    }
+}
 
 exports.getUserByEmail = async ( email ) => {
     const user = await User.findOne({ email })
