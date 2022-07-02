@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require("../helpers/success");
-const { getAllUsers, createUser, updateUser, destroyUser} = require("../services/users");
+const { getAllUsers, createUser, updateUser, destroyUser, login} = require("../services/users");
 
 module.exports = {
     getUsers: catchAsync ( async (req, res, next )=> {
@@ -87,6 +87,25 @@ module.exports = {
             const httpError = createHttpError(
                 error.statusCode,
                 `[Error retrieving User Delete] - [users - DELETE]: ${ error.message }`
+            )
+            next( httpError )
+        }
+    }),
+    login: catchAsync( async (req, res, next ) => {
+        try {
+            const { email, password } = req.body
+
+            const user = await login(email, password);
+            
+            endpointResponse({
+                res,
+                message: 'User login succesfully',
+                body: user
+            })
+        } catch (error) {
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving Auth Login] - [auth - POST]: ${ error.message }`
             )
             next( httpError )
         }

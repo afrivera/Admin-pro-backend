@@ -1,10 +1,4 @@
-exports.user = {
-    name: {
-        exists: {
-            errorMessage: 'Name is required',
-            options: { checkFalsy: true },
-        },
-    },
+exports.auth = {
     email: {
         exists: {
             errorMessage: 'Email is required',
@@ -28,18 +22,4 @@ exports.user = {
         },
     },
     
-}
-
-exports.idUser = {
-    id: {
-        in: ['params'],
-        exists: {
-            errorMessage: 'id is required',
-            options: { checkFalsy: true },
-        },
-        isMongoId: {
-            errorMessage: 'id isn\'t a mongo id',
-            options: { checkFalsy: true },
-        }
-    }
 }

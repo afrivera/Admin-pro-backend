@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const { ErrorObject } = require("../helpers/error");
 const User = require("../models/user");
 
@@ -63,6 +64,19 @@ exports.destroyUser = async ( id) => {
         
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );
+    }
+}
+
+exports.login = async( email, password ) => {
+    try {
+        const user = await this.getUserByEmail( email );
+        const validPassword = user && bcrypt.compareSync( password, user.password );
+        if( !user || !validPassword ){
+            throw new ErrorObject('Invalid Credentials', 401)
+        }
+        return user;        
+    } catch (error) {
+        throw new ErrorObject(error.message, error.statusCode || 500)
     }
 }
 
