@@ -28,6 +28,28 @@ exports.createUser = async ( body ) => {
         throw new ErrorObject( error.message, error.statusCode || 500 );
     }
 }
+  
+exports.updateUser = async ( id, body) => {
+    try {
+        const user = await User.findById( id );
+        if( !user ){
+            throw new ErrorObject('user doesn\'t exist', 404)
+        }
+        if( user.email === body.email ){
+            delete body.email
+        } else {
+            const emailExist = await this.getUserByEmail( body.email );
+            if( emailExist ){
+                throw new ErrorObject('email already exist', 404)
+            }
+        }
+        const userDb = await User.findByIdAndUpdate( id, body, { new: true} )
+        return userDb;
+        
+    } catch (error) {
+        throw new ErrorObject( error.message, error.statusCode || 500 );
+    }
+}
 
 exports.getUserByEmail = async ( email ) => {
     const user = await User.findOne({ email })

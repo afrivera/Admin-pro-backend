@@ -1,7 +1,8 @@
+const bcrypt = require('bcryptjs');
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require("../helpers/success");
-const { getAllUsers, createUser} = require("../services/users");
+const { getAllUsers, createUser, updateUser} = require("../services/users");
 
 module.exports = {
     getUsers: catchAsync ( async (req, res, next )=> {
@@ -26,7 +27,10 @@ module.exports = {
         const { name, email, password } = req.body;
                 
         try {
-            const body = { name, email, password };
+            // encrypt password
+            const encryptPassword = bcrypt.hashSync( password, 10);
+
+            const body = { name, email, password: encryptPassword };
             const user = await createUser( body );
             
         endpointResponse({
@@ -40,6 +44,29 @@ module.exports = {
             const httpError = createHttpError(
                 error.statusCode,
                 `[Error retrieving User Create] - [users - POST]: ${ error.message }`
+            )
+            next( httpError )
+        }
+    }),
+    putUser: catchAsync( async (req, res, next ) => {
+    
+        const { id } = req.params;
+        const { password, ...body } = req.body
+                
+        try {
+            const user = await updateUser( id, body );
+            
+        endpointResponse({
+            code: 201,
+            res,
+            message: "User Updated",
+            body: user,
+        })
+            
+        } catch (error) {
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving User Update] - [users - PUT]: ${ error.message }`
             )
             next( httpError )
         }
