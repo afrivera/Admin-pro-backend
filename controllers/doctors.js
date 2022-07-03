@@ -1,15 +1,15 @@
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require("../helpers/success");
-const { getAllDoctors, createDoctor, updateDoctor, destroyDoctor, login} = require("../services/doctors");
+const { getAllDoctors, createDoctor, updateDoctor, destroyDoctor} = require("../services/doctors");
 
 module.exports = {
     getDoctors: catchAsync ( async (req, res, next )=> {
         try {
-            const Doctors = await getAllDoctors();
+            const doctors = await getAllDoctors();
             endpointResponse({
                 res,
-                body: Doctors,
+                body: doctors,
                 message: 'Doctors list retrieved successfully'
             })
             
@@ -28,13 +28,13 @@ module.exports = {
         try {
 
             const body = { name, hospital, user: req.uid };
-            const Doctor = await createDoctor( body );
+            const doctor = await createDoctor( body );
             
         endpointResponse({
             code: 201,
             res,
             message: "Doctor Created",
-            body: Doctor,
+            body: doctor,
         })
             
         } catch (error) {
@@ -51,12 +51,12 @@ module.exports = {
         const { password, google, ...body } = req.body
                 
         try {
-            const Doctor = await updateDoctor( id, body );
+            const doctor = await updateDoctor( id, body );
             
         endpointResponse({
             res,
             message: "Doctor Updated",
-            body: Doctor,
+            body: doctor,
         })
             
         } catch (error) {
@@ -72,37 +72,18 @@ module.exports = {
         const { id } = req.params;
                 
         try {
-            const Doctor = await destroyDoctor( id );
+            const dDoctor = await destroyDoctor( id );
             
         endpointResponse({
             res,
             message: "Doctor Deleted",
-            body: Doctor,
+            body: dDoctor,
         })
             
         } catch (error) {
             const httpError = createHttpError(
                 error.statusCode,
                 `[Error retrieving Doctor Delete] - [Doctors - DELETE]: ${ error.message }`
-            )
-            next( httpError )
-        }
-    }),
-    login: catchAsync( async (req, res, next ) => {
-        try {
-            const { email, password } = req.body
-
-            const Doctor = await login(email, password);
-            
-            endpointResponse({
-                res,
-                message: 'Doctor login succesfully',
-                body: Doctor
-            })
-        } catch (error) {
-            const httpError = createHttpError(
-                error.statusCode,
-                `[Error retrieving Auth Login] - [auth - POST]: ${ error.message }`
             )
             next( httpError )
         }

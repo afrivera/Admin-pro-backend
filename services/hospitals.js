@@ -5,6 +5,7 @@ const Hospital = require("../models/hospital");
 exports.getAllHospitals = async()=>{
     try {
         const hospitals = await Hospital.find()
+            .populate('user', 'name image');
         if( !hospitals || hospitals.length === 0 ){
             throw new ErrorObject('No Hospitals Found', 404)
         }

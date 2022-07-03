@@ -6,8 +6,10 @@ const { getAllUsers, createUser, updateUser, destroyUser, login} = require("../s
 
 module.exports = {
     getUsers: catchAsync ( async (req, res, next )=> {
+        const since  = Number( req.query.since ) || 0;
+        const limit  = Number( req.query.limit ) || 5;
         try {
-            const users = await getAllUsers();
+            const users = await getAllUsers( since, limit );
             endpointResponse({
                 res,
                 body: users,

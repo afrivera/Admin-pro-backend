@@ -4,13 +4,18 @@ const { generateJWT } = require('../helpers/jwt');
 const User = require("../models/user");
 
 
-exports.getAllUsers = async()=>{
+exports.getAllUsers = async( since, limit )=>{
     try {
-        const users = await User.find()
+        const [users, total ] = await Promise.all([
+            User.find()
+                .skip( since )
+                .limit( limit ),
+                User.count()
+        ])
         if( !users || users.length === 0 ){
             throw new ErrorObject('No Users Found', 404)
         }
-        return users;
+        return { users, total };
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );
     }

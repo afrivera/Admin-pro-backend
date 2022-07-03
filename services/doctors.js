@@ -5,6 +5,8 @@ const Doctor = require("../models/doctor");
 exports.getAllDoctors = async()=>{
     try {
         const Doctors = await Doctor.find()
+            .populate('user', 'name image')
+            .populate('hospital', 'name image')
         if( !Doctors || Doctors.length === 0 ){
             throw new ErrorObject('No Doctors Found', 404)
         }
