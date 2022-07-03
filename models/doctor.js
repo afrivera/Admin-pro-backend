@@ -9,10 +9,12 @@ const doctorSchema = Schema({
         type: String
     },
     user: {
+        required: true,
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
     hospital: {
+        required: true,
         type: Schema.Types.ObjectId,
         ref: 'Hospital'
     }

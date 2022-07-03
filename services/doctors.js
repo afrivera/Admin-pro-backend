@@ -16,13 +16,9 @@ exports.getAllDoctors = async()=>{
   
 exports.createDoctor = async ( body ) => {
     try {
-        const emailExist = await this.getUserByEmail( body.email );
-        if( emailExist ){
-            throw new ErrorObject('Email already exist', 404)
-        }
-        const Doctor = new Doctor( body );
-        await Doctor.save();
-        return Doctor;
+        const doctor = new Doctor( body );
+        await doctor.save();
+        return doctor;
         
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );

@@ -23,11 +23,11 @@ module.exports = {
     }),
     postDoctor: catchAsync( async (req, res, next ) => {
     
-        const { name, email, password } = req.body;
+        const { name, hospital } = req.body;
                 
         try {
 
-            const body = { name, email, password: encryptPassword };
+            const body = { name, hospital, user: req.uid };
             const Doctor = await createDoctor( body );
             
         endpointResponse({

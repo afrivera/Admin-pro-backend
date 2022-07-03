@@ -6,13 +6,13 @@ const { Router } = require('express');
 const { postDoctor, getDoctors, putDoctor, destroyDoctor } = require('../controllers/doctors');
 const { validateJWT } = require('../middlewares/validate-jwt');
 const { schemaValidator } = require('../middlewares/validator');
-const { user, idUser } = require('../schemas/user');
+const { doctor, idDoctor } = require('../schemas/doctor');
 
 const router = Router();
 
 router.get('/',/*  validateJWT, */ getDoctors)
-router.post('/', /* schemaValidator( user ), */ postDoctor)
-router.put('/:id', validateJWT, schemaValidator( idUser), putDoctor)
-router.delete('/:id', validateJWT, schemaValidator( idUser), destroyDoctor)
+router.post('/', validateJWT, schemaValidator( doctor ), postDoctor)
+router.put('/:id', validateJWT, schemaValidator( idDoctor), putDoctor)
+router.delete('/:id', validateJWT, schemaValidator( idDoctor), destroyDoctor)
 
 module.exports = router;
