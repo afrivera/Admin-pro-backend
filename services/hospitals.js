@@ -16,10 +16,6 @@ exports.getAllHospitals = async()=>{
   
 exports.createHospital = async ( body ) => {
     try {
-        const emailExist = await this.getUserByEmail( body.email );
-        if( emailExist ){
-            throw new ErrorObject('Email already exist', 404)
-        }
         const hospital = new Hospital( body );
         await hospital.save();
         return hospital;

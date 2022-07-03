@@ -23,19 +23,18 @@ module.exports = {
     }),
     postHospital: catchAsync( async (req, res, next ) => {
     
-        const { name, email, password } = req.body;
+        const { name } = req.body;
                 
         try {
-
-            const body = { name, email, password: encryptPassword };
+            const body = { name, user: req.uid }
             const Hospital = await createHospital( body );
             
-        endpointResponse({
-            code: 201,
-            res,
-            message: "Hospital Created",
-            body: Hospital,
-        })
+            endpointResponse({
+                code: 201,
+                res,
+                message: "Hospital Created",
+                body: Hospital,
+            })
             
         } catch (error) {
             const httpError = createHttpError(
