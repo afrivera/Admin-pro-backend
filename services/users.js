@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { ErrorObject } = require("../helpers/error");
+const { generateJWT } = require('../helpers/jwt');
 const User = require("../models/user");
 
 
@@ -21,9 +22,10 @@ exports.createUser = async ( body ) => {
         if( emailExist ){
             throw new ErrorObject('Email already exist', 404)
         }
-        const user = new User( body )
+        const user = new User( body );
+        const token = await generateJWT( user.id )
         await user.save();
-        return user;
+        return {user, token};
         
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );
@@ -74,7 +76,8 @@ exports.login = async( email, password ) => {
         if( !user || !validPassword ){
             throw new ErrorObject('Invalid Credentials', 401)
         }
-        return user;        
+        const token = await generateJWT( user.id )
+        return {user, token};        
     } catch (error) {
         throw new ErrorObject(error.message, error.statusCode || 500)
     }
