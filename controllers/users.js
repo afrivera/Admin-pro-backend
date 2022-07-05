@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require("../helpers/success");
-const { getAllUsers, createUser, updateUser, destroyUser, login} = require("../services/users");
+const { getAllUsers, createUser, updateUser, destroyUser, login, verifyGoogle} = require("../services/users");
 
 module.exports = {
     getUsers: catchAsync ( async (req, res, next )=> {
@@ -108,6 +108,25 @@ module.exports = {
             const httpError = createHttpError(
                 error.statusCode,
                 `[Error retrieving Auth Login] - [auth - POST]: ${ error.message }`
+            )
+            next( httpError )
+        }
+    }),
+    loginGoogle: catchAsync( async (req, res, next ) => {
+        try {
+            const { token } = req.body
+
+            const user = await verifyGoogle(token);
+            
+            endpointResponse({
+                res,
+                message: 'User Google login succesfully',
+                body: user
+            })
+        } catch (error) {
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving Auth-Google Login] - [auth Google - POST]: ${ error.message }`
             )
             next( httpError )
         }

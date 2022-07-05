@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { ErrorObject } = require("../helpers/error");
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_ID);
 const { generateJWT } = require('../helpers/jwt');
 const User = require("../models/user");
 
@@ -83,6 +85,31 @@ exports.login = async( email, password ) => {
         }
         const token = await generateJWT( user.id )
         return {user, token};        
+    } catch (error) {
+        throw new ErrorObject(error.message, error.statusCode || 500)
+    }
+}
+
+exports.verifyGoogle = async( token ) => {
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_ID,  
+        });
+        const payload = ticket.getPayload();
+        const { name, email, picture} = payload;
+        const userDB = this.getUserByEmail( email);
+        if(!userDB) {
+            const body = { name, email, image: picture, password: ':D'}
+            const user = await this.createUser( body );
+            return user;
+        } else {
+            // user exist
+            const token = await generateJWT( user.id )
+            return { userDB, token }
+        }
+    
+    //   verifyGoogle().catch(console.error);  
     } catch (error) {
         throw new ErrorObject(error.message, error.statusCode || 500)
     }

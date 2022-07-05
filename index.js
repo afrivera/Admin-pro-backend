@@ -19,6 +19,8 @@ app.use(cors());
 // Database
 dbConnection();
 
+// directory publi
+app.use(express.static('public'))
 
 // Routes
 app.use( '/api', require('./routes'))
