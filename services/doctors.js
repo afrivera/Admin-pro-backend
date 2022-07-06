@@ -29,12 +29,12 @@ exports.createDoctor = async ( body ) => {
   
 exports.updateDoctor = async ( id, body) => {
     try {
-        const Doctor = await Doctor.findById( id );
-        if( !Doctor ){
+        const doctor = await Doctor.findById( id );
+        if( !doctor ){
             throw new ErrorObject('Doctor doesn\'t exist', 404)
         }
-        const DoctorDb = await Doctor.findByIdAndUpdate( id, body, { new: true} )
-        return DoctorDb;
+        const doctorDb = await Doctor.findByIdAndUpdate( id, body, { new: true} )
+        return doctorDb;
         
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );
@@ -43,13 +43,13 @@ exports.updateDoctor = async ( id, body) => {
   
 exports.destroyDoctor = async ( id) => {
     try {
-        const Doctor = await Doctor.findById( id );
-        if( !Doctor ){
+        const doctor = await Doctor.findById( id );
+        if( !doctor ){
             throw new ErrorObject('Doctor doesn\'t exist', 404)
         }
         
-        const DoctorDb = await Doctor.findByIdAndRemove( id )
-        return DoctorDb;
+        const doctorDb = await Doctor.findByIdAndRemove( id )
+        return doctorDb;
         
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );
