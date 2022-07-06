@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="861321285134-sqbmpru23vpml0i464uevn8aa5u21e8m.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="174958170554-qqdg6j83ss7l72146n7v84527af9icvs.apps.googleusercontent.com">
     <title>Demo Login</title>
 </head>
 <body>
@@ -14,7 +15,6 @@
 
     <a href="#" onclick="signOut();">Sign out</a>
     
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
@@ -34,6 +34,6 @@
             console.log('User signed out.');
           });
         }
-      </script>
+    </script>
 </body>
 </html>

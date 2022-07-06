@@ -98,14 +98,17 @@ exports.verifyGoogle = async( token ) => {
         });
         const payload = ticket.getPayload();
         const { name, email, picture} = payload;
-        const userDB = this.getUserByEmail( email);
+        const userDB = await this.getUserByEmail( email);
+        delete userDB.password
         if(!userDB) {
-            const body = { name, email, image: picture, password: ':D'}
-            const user = await this.createUser( body );
+            const body = { name, email, image: picture, password: ':D', google: true }
+            console.log('no')
+            const {password, ...user} = await this.createUser( body );
             return user;
         } else {
             // user exist
-            const token = await generateJWT( user.id )
+            const token = await generateJWT( userDB.id )
+            delete userDB.password
             return { userDB, token }
         }
     
@@ -118,4 +121,17 @@ exports.verifyGoogle = async( token ) => {
 exports.getUserByEmail = async ( email ) => {
     const user = await User.findOne({ email })
     return user;
+}
+
+exports.renewToken = async( id ) => {
+    try {
+        const user = await User.findById( id );
+        if( !user ){
+            throw new ErrorObject('User No Found', 404)
+        }
+        const token = await generateJWT( user.id )
+        return { user, token }
+    } catch (error) {
+        throw new ErrorObject( error.message, error.statusCode || 500 );
+    }
 }
