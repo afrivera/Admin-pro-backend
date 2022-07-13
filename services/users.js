@@ -45,7 +45,10 @@ exports.updateUser = async ( id, body) => {
         if( !user ){
             throw new ErrorObject('user doesn\'t exist', 404)
         }
-        if( user.email === body.email ){
+        if( user.email === body.email || user.google){
+            if( user.google && body.email !== user.email){
+                throw new ErrorObject('google user can\'t change the email', 400)
+            }
             delete body.email
         } else {
             const emailExist = await this.getUserByEmail( body.email );
