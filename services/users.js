@@ -102,7 +102,6 @@ exports.verifyGoogle = async( token ) => {
         const payload = ticket.getPayload();
         const { name, email, picture} = payload;
         const userDB = await this.getUserByEmail( email);
-        delete userDB.password
         if(!userDB) {
             const body = { name, email, image: picture, password: ':D', google: true }
             console.log('no')
