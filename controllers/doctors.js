@@ -1,12 +1,29 @@
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require("../helpers/success");
-const { getAllDoctors, createDoctor, updateDoctor, destroyDoctor} = require("../services/doctors");
+const { getAllDoctors, createDoctor, updateDoctor, destroyDoctor, getDoctorById } = require("../services/doctors");
 
 module.exports = {
     getDoctors: catchAsync ( async (req, res, next )=> {
         try {
             const doctors = await getAllDoctors();
+            endpointResponse({
+                res,
+                body: doctors,
+                message: 'Doctors list retrieved successfully'
+            })
+            
+        } catch (error) {
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving Doctor list] - [Doctors - GET]: ${ error.message }`
+            )
+            next( httpError )
+        }
+    }),
+    getDoctorById: catchAsync ( async (req, res, next )=> {
+        try {
+            const doctors = await getDoctorById( req.params.id );
             endpointResponse({
                 res,
                 body: doctors,

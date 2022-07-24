@@ -15,6 +15,19 @@ exports.getAllDoctors = async()=>{
         throw new ErrorObject( error.message, error.statusCode || 500 );
     }
 }
+exports.getDoctorById = async( id )=>{
+    try {
+        const doctor = await Doctor.findById( id )
+            .populate('user', 'name image')
+            .populate('hospital', 'name image')
+        if( !doctor || doctor.length === 0 ){
+            throw new ErrorObject('No Doctor Found', 404)
+        }
+        return doctor;
+    } catch (error) {
+        throw new ErrorObject( error.message, error.statusCode || 500 );
+    }
+}
   
 exports.createDoctor = async ( body ) => {
     try {
