@@ -1,5 +1,6 @@
 const { ErrorObject } = require("../helpers/error");
 const { validToken } = require("../helpers/jwt");
+const User = require("../models/user");
 
 
 exports.validateJWT = async (req, res, next ) => {
@@ -27,4 +28,23 @@ exports.validateJWT = async (req, res, next ) => {
         next( new ErrorObject( error.message, error.statusCode || 500 ));
     }
 
+}
+
+
+exports.isOwnerOrAdminRole = async( req, res, next ) => {
+    const uid = req.uid;
+    const { id } = req.params;
+
+    try {
+        const userDB = await User.findById( uid );
+    
+        if( userDB.role !== 'ADMIN_ROLE' && uid !== id){
+            throw new ErrorObject('Elevation Required', 401); 
+        }
+
+        next();
+        
+    } catch (error) {
+        next( new ErrorObject( error.message, error.statusCode || 500 ));
+    }
 }
