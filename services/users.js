@@ -4,6 +4,7 @@ const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_ID);
 const { generateJWT } = require('../helpers/jwt');
 const User = require("../models/user");
+const { getMenuFrontend } = require('../helpers/menu-frontend');
 
 
 exports.getAllUsers = async( since, limit )=>{
@@ -87,7 +88,7 @@ exports.login = async( email, password ) => {
             throw new ErrorObject('Invalid Credentials', 401)
         }
         const token = await generateJWT( user.id )
-        return {user, token};        
+        return {user, token, menu: getMenuFrontend(user.role)};        
     } catch (error) {
         throw new ErrorObject(error.message, error.statusCode || 500)
     }
@@ -111,7 +112,7 @@ exports.verifyGoogle = async( token ) => {
             // user exist
             const token = await generateJWT( userDB.id )
             delete userDB.password
-            return { userDB, token }
+            return { userDB, token, menu: getMenuFrontend(userDB.role)}
         }
     
     //   verifyGoogle().catch(console.error);  
@@ -132,7 +133,7 @@ exports.renewToken = async( id ) => {
             throw new ErrorObject('User No Found', 404)
         }
         const token = await generateJWT( user.id )
-        return { user, token }
+        return { user, token, menu: getMenuFrontend( user.role ) }
     } catch (error) {
         throw new ErrorObject( error.message, error.statusCode || 500 );
     }
