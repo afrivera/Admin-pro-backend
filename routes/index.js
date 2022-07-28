@@ -19,6 +19,6 @@ router.use('/doctors', doctorRouter)
 router.use('/all', searchRouter)
 router.use('/uploads', uploadRouter)
 router.use('/uploads', uploadRouter)
-router.use('/api/docs', swaggerRouter)
+router.use('/docs', swaggerRouter)
 
 module.exports = router;

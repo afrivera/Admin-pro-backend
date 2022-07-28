@@ -10,6 +10,6 @@ const { configSwagger } = require('../swagger/config');
 const router = Router();
 
 const specs = swaggerJSDoc( configSwagger );
-router.use('/', swaggerUI.serve, swaggerUI.setup( specs ));
+router.use('/', swaggerUI.serve, swaggerUI.setup( specs, { explorer: true}));
 
 module.exports = router;
