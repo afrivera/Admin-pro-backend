@@ -23,7 +23,7 @@ const router = Router();
  *      user:
  *          type: object
  *          properties:
- *              id:
+ *              uid:
  *                  type: string
  *                  description: autogenerate by mongo
  *              name:
