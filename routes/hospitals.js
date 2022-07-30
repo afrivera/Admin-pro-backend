@@ -12,7 +12,7 @@
  *          name: x-token
  * 
  *  schemas:
- *      hospitalUser:
+ *      responseUser:
  *          type: object
  *          properties:
  *              _id: 
@@ -33,13 +33,13 @@
  *                  description: autogenereate by mongo
  *              name:
  *                  type: string
- *                  description: name of the user
+ *                  description: name of the Hospital
  *              image: 
  *                  type: string
- *                  description: image of the user
+ *                  description: image of the Hospital
  *              user:
  *                  type: object
- *                  $ref: '#components/schemas/hospitalUser'
+ *                  $ref: '#components/schemas/responseUser'
  *      hospitalResponse:
  *          type: object
  *          properties:
@@ -63,7 +63,7 @@
  *                           description: id of user
  * 
  *  parameters:
- *      hospitalId:
+ *      mongoId:
  *          in: path
  *          name: id
  *          schema:
@@ -123,6 +123,7 @@ router.get('/',  validateJWT,  getHospitals)
  * @swagger
  *  /hospitals:
  *  post:
+ * 
  *      summary: create a new Hospital
  *      tags: [Hospital]
  *      security:
@@ -164,7 +165,7 @@ router.post('/', validateJWT, schemaValidator( hospital ), postHospital)
  *      summary: Update a Hospital By Id
  *      tags: [Hospital]
  *      parameters:
- *          - $ref: '#components/parameters/hospitalId'
+ *          - $ref: '#components/parameters/mongoId'
  *      security:
  *          - apiKeyAuth: []
  *      requestBody:
@@ -206,7 +207,7 @@ router.put('/:id', validateJWT, schemaValidator( idHospital), putHospital)
  *      security:
  *          - ApiKeyAuth: []
  *      parameters:
- *          - $ref: '#components/parameters/hospitalId'
+ *          - $ref: '#components/parameters/mongoId'
  *      responses:
  *          200:
  *              description: successful response - Hospital succesfully update
