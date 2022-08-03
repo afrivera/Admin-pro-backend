@@ -35,14 +35,10 @@ describe('Test Authenticate a user /auth', () => {
                     
        const { code, status, message, body: bodyRes } = body;
 
-       expect( code ).to.be.a('number');
-       expect( code ).to.be.equal(200);
-       expect( status ).to.be.a('boolean');
-       expect( status ).to.equal(true);
-       expect( message ).to.be.a('string');
-       expect( message ).to.equal('User login succesfully');
+       expect( code ).to.be.a('number').equal(200);
+       expect( status ).to.be.a('boolean').equal(true);
+       expect( message ).to.be.a('string').equal('User login succesfully');
        expect( bodyRes ).to.be.a('object');
-
        expect( bodyRes.user ).to.be.a('object');
        expect( bodyRes.token ).to.be.a('string');
        expect( bodyRes.menu ).to.be.a('array');
@@ -98,20 +94,28 @@ describe('Test Authenticate a user /auth', () => {
                     
         const { code, status, message, body: bodyRes } = body;
 
-        expect( code ).to.be.a('number');
-        expect( code ).to.be.equal(200);
-        expect( status ).to.be.a('boolean');
-        expect( status ).to.equal(true);
-        expect( message ).to.be.a('string');
-        expect( message ).to.equal('renew token succesfully');
-        expect( bodyRes ).to.be.a('object');
-    
+        expect( code ).to.be.a('number').equal(200);
+        expect( status ).to.be.a('boolean').equal(true);
+        expect( message ).to.be.a('string').equal('renew token succesfully');
+        expect( bodyRes ).to.be.a('object');    
         expect( bodyRes.user ).to.be.a('object');
         expect( bodyRes.token ).to.be.a('string');
         expect( bodyRes.menu ).to.be.a('array');
     
         token = bodyRes.token;
 
+    })
+
+    it( 'GET [ERROR] - It should return an error with jwt malformed', async() => {
+
+        const res  = await api.get('/api/auth/renew')
+                                        .set('x-token', 'token' )
+                                        .expect('Content-Type', /text\/html/)
+                                        .expect(401)
+            
+
+        expect( res.status).to.be.a('number').equal(401);
+        expect( res ).to.have.property('text').include('jwt malformed');
     })
 
 })
