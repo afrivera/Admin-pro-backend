@@ -37,6 +37,10 @@ exports.isOwnerOrAdminRole = async( req, res, next ) => {
 
     try {
         const userDB = await User.findById( uid );
+
+        if(!userDB){
+            throw new ErrorObject('User unauthorized', 401); 
+        }
     
         if( userDB.role !== 'ADMIN_ROLE' && uid !== id){
             throw new ErrorObject('Elevation Required', 401); 

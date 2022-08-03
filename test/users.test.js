@@ -167,6 +167,18 @@ describe('Test Users /api/users', async() => {
         expect( status ).to.be.a('boolean').equal(true);
         expect( message ).to.be.a('string').equal('User Deleted')
         expect( bodyRes ).to.be.a('object');
-    })       
+    })    
+
+    it('DELETE [ERROR] - It should return an error User unauthorized', async ()=> {
+      
+        const res = await api.delete(`/api/users/${ idUser }`)
+                                        .set('Accept', 'application/json')
+                                        .set('x-token', token)
+                                        .expect('Content-Type', /text\/html/)
+                                        .expect(401)
+       
+        expect( res.status).to.be.a('number').equal(401);
+        expect( res ).to.have.property('text').include('User unauthorized');
+    })    
 
  })
