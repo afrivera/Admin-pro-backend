@@ -90,21 +90,6 @@ describe('Test Users /api/users', async() => {
                                 
     })
     
-    // it('PUT [ERROR] - It should return an error with user does not exist', async ()=> {
-      
-    //     const res = await api.put(`/api/users/62d02dbc335220c79d715d1q`)
-    //                                     .set('Accept', 'application/json')
-    //                                     .set('x-token', token)
-    //                                     .send( { name: 'user edit'} )
-    //                                     .expect('Content-Type', /json/)
-    //                                     .expect(403)
-       
-    //     console.log(res)
-    //     // expect( res.status).to.be.a('number').equal(403);
-    //     // expect( res ).to.have.property('text').include('id isn\'t a mongo id');
-                                
-    // })
-    
     it('PUT [ERROR] - It should return message with there is no token in the request', async ()=> {
       
         const res = await api.put(`/api/users/${ idUser }`)
