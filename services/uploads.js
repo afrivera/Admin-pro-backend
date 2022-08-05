@@ -34,7 +34,7 @@ exports.updateImage = async( collection, id, nameFile )=>{
                     return false
                 }
                 const oldPathHospital = `./uploads/hospitals/${ data.image }`;
-                _deleteImage( oldPathHospital );
+                // _deleteImage( oldPathHospital );
 
                 data.image = nameFile;
                 data.save();

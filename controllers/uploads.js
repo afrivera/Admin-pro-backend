@@ -17,30 +17,25 @@ module.exports = {
                 throw new ErrorObject(`collection  should be doctors, hospitals or users`, 400)
             }
 
-            // valid if exist any file
-            if( !req.files || Object.keys( req.files).length === 0){
+            if( !req.file){
                 throw new ErrorObject(`there is no any file in the request`, 400)
             }
 
-            const file = req.files.image
-            
-            const separeName = file.name.split('.');
-            const extFile = separeName[ separeName.length - 1];
 
-            // valid extension
-            const validExtensions = ['png', 'jpg', 'jpeg', 'gif'];
-            if( !validExtensions.includes( extFile )){
-                throw new ErrorObject(`extension file invalid`, 400)                
-            }
+            const file = req.file;            
+
+            const separeName = file.originalname.split('.');
+            const extFile = separeName[ separeName.length - 1];
 
             // generate name file
             const nameFile = `${ uuidv4()}.${ extFile }`;
 
             // path to save images
+            const pathOld = `./uploads/${ file.originalname }`
             const path = `./uploads/${ collection }/${ nameFile }`;
 
-            // move the image
-            file.mv( path, err => {
+            // // move the image
+            fs.renameSync( pathOld, path, err => {
                 if( err ){
                     throw new ErrorObject(`there is an error trying to move the image`, 500)
                 }
