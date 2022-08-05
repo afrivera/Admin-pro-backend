@@ -20,7 +20,7 @@ app.use(cors());
 dbConnection();
 
 // directory publi
-app.use(express.static('public'))
+// app.use(express.static('public'))
 
 // Routes
 app.use( '/api', require('./routes'))
